@@ -1,24 +1,25 @@
 const errorTypes = require('../constants/err-types');
+const { SuccessModel } = require('../model/resultModel')
 
 const errorHandler = (error, ctx) => {
   let status, message;
 
   switch (error.message) {
     case errorTypes.NAME_OR_PASSWORD_IS_REQUIRED:
-      status = 400; // Bad Request
+      status = 200; // Bad Request
       message = "用户名或者密码不能为空~";
       break;
     case errorTypes.USER_ALREADY_EXISTS:
-      status = 409; // conflict
+      status = 200; // conflict
       message = "用户名已经存在~";
       break;
     case errorTypes.USER_DOES_NOT_EXISTS:
-      status = 400; // 参数错误
+      status = 200; // 参数错误
       message = "用户名不存在~";
       break;
     case errorTypes.PASSWORD_IS_INCORRENT:
-      status = 400; // 参数错误
-      message = "密码是错误的~";
+      status = 200; // 参数错误
+      message = "用户名或密码错误~";
       break;
     case errorTypes.UNAUTHORIZATION:
       status = 401; // 参数错误
@@ -34,7 +35,9 @@ const errorHandler = (error, ctx) => {
   }
 
   ctx.status = status;
-  ctx.body = message;
+  ctx.body = {
+    msg: message
+  };
 }
 
 module.exports = errorHandler;
