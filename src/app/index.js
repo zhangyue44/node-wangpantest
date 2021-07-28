@@ -9,8 +9,6 @@ const errorHandle = require('./err-handle')
 
 app.use(bodyParser());
 
-
-
 useRoutes(app); 
 
 app.on('error', errorHandle)
