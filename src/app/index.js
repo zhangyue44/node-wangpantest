@@ -11,6 +11,6 @@ app.use(bodyParser());
 
 useRoutes(app); 
 
-app.on('error', errorHandle)
+app.on('error', errorHandle);
 
 module.exports = app;
