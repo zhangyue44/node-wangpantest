@@ -1,6 +1,8 @@
+const jwt = require('jsonwebtoken');
 const errorType = require('../constants/err-types');
 const userService = require('../service/user.service');
 const md5password = require('../utils/password-handle')
+const { PUBLIC_KEY } = require('../app/config');
 
 // 用户注册中间件
 const verifyUser = async(ctx, next) => {
@@ -44,9 +46,30 @@ const verifyLogin = async(ctx, next) => {
   await next();
 }
 
+// 检查用户是否授权
+const verifyAuth = async(ctx, next) => {
+  const authorization = ctx.header.authorization;
+  if (!authorization) {
+    const error = new Error(errorType.UNAUTHORIZATION);
+    return ctx.app.emit('error', error, ctx);
+  }
+  const token = authorization.replace('Bearer', '')
+  try {
+    const result = jwt.verify(token, PUBLIC_KEY, {
+      algorithms: ['RS256']
+    });
+    ctx.user = result;
+    // await next();
+  } catch (err) {
+    const error = new Error(errorType.UNAUTHORIZATION);
+    return ctx.app.emit('error', error, ctx)
+  }
+  ctx.body = ctx.user;
+}
 
 module.exports = {
   verifyUser,
   handlePassword,
-  verifyLogin
+  verifyLogin,
+  verifyAuth
 }

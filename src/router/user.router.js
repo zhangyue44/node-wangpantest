@@ -1,5 +1,5 @@
 const Router = require('koa-router');
-const { verifyUser, handlePassword, verifyLogin } = require('../middleware/user.middleware')
+const { verifyUser, handlePassword, verifyLogin, verifyAuth } = require('../middleware/user.middleware')
 const { create, createLogin } = require('../controller/user.controller');
 
 const userRouter = new Router({prefix: '/user'});
@@ -7,5 +7,7 @@ const userRouter = new Router({prefix: '/user'});
 userRouter.post('/', verifyUser, handlePassword, create);
 // 用户登录
 userRouter.post('/login', verifyLogin, createLogin);
+// 测试接口
+userRouter.post('/plate/:id', verifyAuth);
 
 module.exports = userRouter;
