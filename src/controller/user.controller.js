@@ -23,6 +23,10 @@ class UserController {
       token
     }
   }
+  async createUsername(ctx, next) {
+    const { name } = ctx.user;
+    ctx.body = name;
+  }
 }
 
 module.exports = new UserController();
